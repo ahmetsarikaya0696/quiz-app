@@ -5,6 +5,9 @@ function App() {
   return (
     <>
       <Header />
+      <main>
+        <Quiz />
+      </main>
     </>
   );
 }
