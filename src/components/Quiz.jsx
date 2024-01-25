@@ -10,7 +10,7 @@ export default function Quiz() {
 
   if (quizIsOver) {
     return (
-      <div className="summary">
+      <div id="summary">
         <img src={quizIsOverImg} alt="Thropht Icon" />
         <h2>QUIZ IS OVER!</h2>
       </div>
