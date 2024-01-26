@@ -33,6 +33,7 @@ export default function Answers({
             <button
               onClick={() => onSelectAnswer(shuffledAnswer)}
               className={btnClass}
+              disabled={answerState !== ""}
             >
               {shuffledAnswer}
             </button>
