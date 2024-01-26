@@ -20,7 +20,8 @@ export default function Quiz() {
   []);
 
   const handleSkipAnswer = useCallback(
-    function handleSkipAnswer() {
+    function handleSkipAnswer(disabled) {
+      if (disabled) return;
       handleSelectAnswer(null);
     },
     [handleSelectAnswer]
@@ -29,11 +30,11 @@ export default function Quiz() {
   return (
     <div id="quiz">
       {quizIsOver ? (
-        <Summary />
+        <Summary questions={QUESTIONS} userAnswers={userAnswers} />
       ) : (
         <Question
           key={activeQuestionIndex}
-          questinIndex={activeQuestionIndex}
+          questionIndex={activeQuestionIndex}
           onTimeout={handleSkipAnswer}
           onSelectAnswer={handleSelectAnswer}
         />

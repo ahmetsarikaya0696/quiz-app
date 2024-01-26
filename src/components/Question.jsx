@@ -3,7 +3,7 @@ import Answers from "./Answers";
 import QuestionTimer from "./QuestionTimer";
 import QUESTIONS from "../questions.js";
 
-export default function Question({ questinIndex, onTimeout, onSelectAnswer }) {
+export default function Question({ questionIndex, onTimeout, onSelectAnswer }) {
   const [answer, setAnswer] = useState({
     selectedAnswer: "",
     isCorrect: null,
@@ -28,7 +28,7 @@ export default function Question({ questinIndex, onTimeout, onSelectAnswer }) {
     setTimeout(() => {
       setAnswer({
         selectedAnswer: selectedAnswer,
-        isCorrect: QUESTIONS[questinIndex][0] === selectedAnswer,
+        isCorrect: QUESTIONS[questionIndex][0] === selectedAnswer,
       });
 
       setTimeout(() => {
@@ -38,7 +38,6 @@ export default function Question({ questinIndex, onTimeout, onSelectAnswer }) {
   }
 
   let answerState = "";
-
   if (answer.selectedAnswer && answer.isCorrect !== null) {
     answerState = answer.isCorrect ? "correct" : "wrong";
   } else if (answer.selectedAnswer) {
@@ -50,12 +49,12 @@ export default function Question({ questinIndex, onTimeout, onSelectAnswer }) {
       <QuestionTimer
         key={timer}
         timeout={timer}
-        onTimeout={answer.selectedAnswer === "" ? onTimeout : null}
+        onTimeout={() => onTimeout(answer.selectedAnswer !== "")}
         mode={answerState}
       />
-      <h2>{QUESTIONS[questinIndex].text}</h2>
+      <h2>{QUESTIONS[questionIndex].text}</h2>
       <Answers
-        answers={QUESTIONS[questinIndex].answers}
+        answers={QUESTIONS[questionIndex].answers}
         selectedAnswer={answer.selectedAnswer}
         answerState={answerState}
         onSelectAnswer={handleSelectAnswer}
