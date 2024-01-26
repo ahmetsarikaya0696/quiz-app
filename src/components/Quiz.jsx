@@ -2,6 +2,8 @@ import { useCallback, useState } from "react";
 import QUESTIONS from "../questions.js";
 import quizIsOverImg from "../assets/quiz-complete.png";
 import QuestionTimer from "./QuestionTimer.jsx";
+import Answers from "./Answers.jsx";
+import Question from "./Question.jsx";
 
 const timeout = 5000;
 export default function Quiz() {
@@ -12,6 +14,9 @@ export default function Quiz() {
     answerState === "" ? userAnswers.length : userAnswers.length - 1;
   const quizIsOver = QUESTIONS.length === userAnswers.length;
 
+  const activeQuestion = QUESTIONS[activeQuestionIndex];
+  const activeAnswers = activeQuestion.answers;
+
   if (quizIsOver) {
     return (
       <div id="summary">
@@ -20,11 +25,6 @@ export default function Quiz() {
       </div>
     );
   }
-
-  const activeQuestion = QUESTIONS[activeQuestionIndex];
-  const shuffledAnswers = [...activeQuestion.answers].sort(
-    () => Math.random() - 0.5
-  );
 
   const handleSelectAnswer = useCallback(
     function handleSelectAnswer(selectedUserAnswer) {
@@ -59,42 +59,16 @@ export default function Quiz() {
 
   return (
     <div id="quiz">
-      <div id="question">
-        <QuestionTimer
-          key={activeQuestionIndex}
-          timeout={timeout}
-          onTimeout={handleSkipAnswer}
-        />
-        <h2>{activeQuestion.text}</h2>
-        <ul id="answers">
-          {shuffledAnswers.map((shuffledAnswer) => {
-            const isSelected =
-              userAnswers[userAnswers.length - 1] === shuffledAnswer;
-            let btnClass = "";
-
-            if (answerState === "answered" && isSelected) {
-              btnClass = "selected";
-            }
-
-            if (
-              (answerState === "correct" || answerState === "wrong") &&
-              isSelected
-            ) {
-              btnClass = answerState;
-            }
-            return (
-              <li className="answer" key={shuffledAnswer}>
-                <button
-                  onClick={() => handleSelectAnswer(shuffledAnswer)}
-                  className={btnClass}
-                >
-                  {shuffledAnswer}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+      <Question
+        timeout={timeout}
+        questionText={activeQuestion.text}
+        answers={activeAnswers}
+        selectedAnswer={userAnswers[userAnswers.length - 1]}
+        answerState={answerState}
+        onTimeout={handleSkipAnswer}
+        onSelectAnswer={handleSelectAnswer}
+        key={activeQuestionIndex}
+      />
     </div>
   );
 }
